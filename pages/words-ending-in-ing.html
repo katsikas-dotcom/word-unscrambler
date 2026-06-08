@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Words Ending in ING — Scrabble & Word Game List | WordUnscrambler</title>
+<meta name="description" content="Complete list of words ending in -ING for Scrabble, Words with Friends, and crosswords. From 3-letter to 8-letter -ING words, sorted by score.">
+<meta name="keywords" content="words ending in ing, scrabble words ending ing, ing words, words that end in ing, ing word list">
+<link rel="canonical" href="https://wordunscrambler.io/pages/words-ending-in-ing">
+<link rel="stylesheet" href="../css/shared.css">
+<style>
+  .length-section { margin-bottom:32px; }
+  .len-head {
+    display:flex; align-items:center; gap:12px;
+    font-family:'Playfair Display',serif; font-size:20px; font-weight:700;
+    margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--border);
+  }
+  .len-badge {
+    background:var(--amber); color:white;
+    font-family:'DM Mono',monospace; font-size:13px; font-weight:700;
+    padding:3px 10px; border-radius:20px;
+  }
+  .word-grid { display:flex; flex-wrap:wrap; gap:7px; }
+  .ing-chip {
+    background:var(--white); border:1.5px solid var(--border); border-radius:8px;
+    padding:8px 13px; font-family:'DM Mono',monospace;
+    font-size:13px; font-weight:600; letter-spacing:.05em;
+    text-transform:uppercase; cursor:pointer; transition:all .15s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .ing-chip:hover { border-color:var(--amber); background:var(--amber-pale); transform:translateY(-1px); }
+  .ing-chip .root { color:var(--muted); font-weight:400; }
+  .ing-chip .pts { font-size:10px; color:var(--rust); font-weight:700; }
+  .ing-chip.premium { border-color:#e67; background:#fff5f2; }
+  .tip-box { background:var(--amber-pale); border:1.5px solid rgba(212,130,10,.25); border-radius:10px; padding:14px 18px; font-size:13px; line-height:1.65; margin-bottom:20px; }
+  .filter-bar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:20px; }
+  .stats-row { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+  .stat { text-align:center; background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:10px 16px; }
+  .stat-n { font-family:'DM Mono',monospace; font-size:20px; font-weight:700; color:var(--amber); }
+  .stat-l { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="../index.html">Word<span>Unscrambler</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="../index.html">Unscrambler</a>
+    <a class="nav-link" href="../wordle.html">Wordle Solver</a>
+    <a class="nav-link" href="high-value-words.html">High-Value Words</a>
+    <a class="nav-link" href="two-letter-words.html">2-Letter Words</a>
+    <a class="nav-link" href="words-with-q.html">Words with Q</a>
+    <a class="nav-link" href="words-with-z.html">Words with Z</a>
+    <a class="nav-link active" href="words-ending-in-ing.html">-ING Words</a>
+      <a class="nav-link" href="words-with-j.html">Words with J</a>
+      <a class="nav-link" href="words-ending-in-er.html">-ER Words</a>
+      <a class="nav-link" href="scrabble-word-finder.html">Word Finder</a>
+  </div>
+</nav>
+
+<div style="padding:10px 24px;background:var(--white);border-bottom:1px solid var(--border);position:relative;z-index:1;">
+  <div class="ad-unit ad-728x90">Advertisement · 728×90</div>
+</div>
+
+<div class="page-header">
+  <h1 class="page-title">Words Ending in <em>-ING</em></h1>
+  <p class="page-subtitle">From RING to BLAZING — every useful -ING word for Scrabble and word games</p>
+</div>
+
+<div class="page-wrap">
+  <div class="main-col">
+
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:15px;line-height:1.75;">The suffix <strong>-ING</strong> is the most powerful pattern in Scrabble. It converts almost any verb into a valid word, and 7-letter -ING words frequently qualify for the <strong>50-point bingo bonus</strong>. This page lists the most useful -ING words sorted by length and Scrabble score.</p>
+    </div>
+
+    <div class="stats-row" id="statsRow">
+      <div class="stat"><div class="stat-n" id="totalCount">—</div><div class="stat-l">Total words</div></div>
+      <div class="stat"><div class="stat-n" id="bingoCount">—</div><div class="stat-l">Bingo-length (7+)</div></div>
+      <div class="stat"><div class="stat-n" id="topScore">—</div><div class="stat-l">Highest score</div></div>
+    </div>
+
+    <div class="filter-bar">
+      <input type="text" id="filterInput" placeholder="Filter -ING words…"
+        style="border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;font-size:14px;font-family:'DM Mono',monospace;background:var(--white);outline:none;width:220px;text-transform:uppercase;letter-spacing:.05em;"
+        oninput="filterAndRender(this.value)">
+      <button class="btn btn-secondary btn-sm" onclick="setSortMode('score')">Sort by score</button>
+      <button class="btn btn-secondary btn-sm" onclick="setSortMode('alpha')">Sort A–Z</button>
+      <button class="btn btn-secondary btn-sm" onclick="setSortMode('len')">Sort by length</button>
+    </div>
+
+    <div id="wordContainer"></div>
+
+    <div class="card-sm" style="margin-top:20px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:10px;">Why -ING Words Win Games</h2>
+      <p style="font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:12px;">The -ING suffix is a Scrabble superweapon for three reasons:</p>
+      <ul style="font-size:14px;color:var(--muted);line-height:1.9;padding-left:18px;">
+        <li><strong>Bingo bait</strong>: Keeping I, N, G on your rack means one more tile + a 4-letter word = a 7-tile bingo (50 bonus points)</li>
+        <li><strong>Hook plays</strong>: Many nouns and adjectives accept -ING as a suffix, doubling your extension options</li>
+        <li><strong>High consonant value</strong>: G scores 2 points, so an -ING ending adds 4 base points to any root word</li>
+        <li><strong>Board flexibility</strong>: -ING words can extend leftward from any existing word ending in a compatible letter</li>
+      </ul>
+      <h3 style="font-size:14px;font-weight:600;margin:16px 0 6px;">Bingo-Worthy -ING Combos to Practice</h3>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">Keep <strong>ING</strong> + <strong>any 4 of: A E R S T</strong> on your rack. Words like STARING, STRANGE, SEATING, EARNING, RESTING are some of the most common 7-letter plays in tournament Scrabble.</p>
+    </div>
+
+    <div style="margin-top:28px;text-align:center;">
+      <div class="ad-unit ad-728x90">Advertisement · 728×90</div>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="ad-unit ad-300x250">Advertisement · 300×250</div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:10px;">Top -ING Words by Score</h3>
+      <div id="topScores" style="display:flex;flex-direction:column;gap:6px;font-size:13px;"></div>
+    </div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:8px;">Related Pages</h3>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+        <a href="words-with-x.html" style="color:var(--amber);text-decoration:none;">→ Words with X</a>
+        <a href="high-value-words.html" style="color:var(--amber);text-decoration:none;">→ High-Value Words</a>
+        <a href="two-letter-words.html" style="color:var(--amber);text-decoration:none;">→ 2-Letter Words</a>
+        <a href="../index.html" style="color:var(--amber);text-decoration:none;">→ Word Unscrambler</a>
+        <a href="../wordle.html" style="color:var(--amber);text-decoration:none;">→ Wordle Solver</a>
+      </div>
+    </div>
+
+    <div class="ad-unit ad-300x600">Advertisement · 300×600</div>
+  </aside>
+</div>
+
+<footer class="site-footer">
+  <a href="../index.html">Home</a>
+  <a href="../wordle.html">Wordle Solver</a>
+  <a href="high-value-words.html">High-Value Words</a>
+  <a href="two-letter-words.html">2-Letter Words</a>
+  <a href="words-with-q.html">Words with Q</a>
+  <a href="words-with-z.html">Words with Z</a>
+  <span>© 2026 WordUnscrambler.io</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="../js/dictionary.js"></script>
+<script>
+const SCORES = window.DICT.SCRABBLE_SCORES;
+function score(w){return[...w].reduce((s,c)=>s+(SCORES[c]||0),0);}
+
+// Comprehensive -ING word list across all lengths
+const ING_WORDS = [
+  // 3-letter
+  {w:"ING",  def:"suffix forming present participles"},
+  // 4-letter
+  {w:"BING", def:"a heap of waste from a mine"},
+  {w:"DING", def:"to make a ringing sound; a dent"},
+  {w:"KING", def:"male ruler of a country"},
+  {w:"PING", def:"a sharp ringing sound"},
+  {w:"RING", def:"a circular band; to make a bell sound"},
+  {w:"SING", def:"to make musical sounds with the voice"},
+  {w:"TING", def:"a high metallic sound"},
+  {w:"WING", def:"a limb used for flying; a section of a building"},
+  {w:"ZING", def:"a high-pitched humming sound; energy"},
+  // 5-letter
+  {w:"BRING", def:"to carry or convey toward the speaker"},
+  {w:"CLING", def:"to hold on tightly; to resist separation"},
+  {w:"BLING", def:"showy jewelry or accessories (informal)"},
+  {w:"FLING", def:"to throw with force; a brief romance"},
+  {w:"GOING", def:"the act of traveling; currently active"},
+  {w:"DOING", def:"the act of performing; in progress"},
+  {w:"SLING", def:"to throw; a device for hurling projectiles; an arm support"},
+  {w:"STING", def:"to cause sharp pain; a deceptive scheme"},
+  {w:"SWING", def:"to move back and forth; a seat hung from above"},
+  {w:"THING", def:"an object or entity; a fact or matter"},
+  {w:"WRONG", def:"not correct; an injustice"},
+  {w:"BEING", def:"existence; a living creature"},
+  {w:"DYING", def:"in the process of death; ceasing"},
+  {w:"LYING", def:"in a horizontal position; telling falsehoods"},
+  {w:"TYING", def:"fastening with a cord; making equal"},
+  {w:"USING", def:"employing for a purpose"},
+  {w:"EYING", def:"watching carefully"},
+  // 6-letter
+  {w:"ACHING", def:"causing dull persistent pain"},
+  {w:"BAKING", def:"cooking in dry heat in an oven"},
+  {w:"BARING", def:"exposing; uncovering"},
+  {w:"BITING", def:"using teeth; sharply cold or critical"},
+  {w:"BORING", def:"making a hole; tediously uninteresting"},
+  {w:"BOXING", def:"fighting with fists; putting into boxes"},
+  {w:"BUYING", def:"purchasing; acquiring with payment"},
+  {w:"CARING", def:"feeling concern for others"},
+  {w:"CAVING", def:"exploring caves; collapsing inward"},
+  {w:"CODING", def:"writing computer code; encoding"},
+  {w:"COMING", def:"approaching; in the near future"},
+  {w:"COPING", def:"dealing with difficulties"},
+  {w:"CURING", def:"treating an illness; preserving food"},
+  {w:"DARING", def:"adventurously bold; a bold challenge"},
+  {w:"DATING", def:"going on romantic outings; determining age"},
+  {w:"DIVING", def:"plunging into water headfirst"},
+  {w:"DOSING", def:"administering medicine in measured amounts"},
+  {w:"DOTING", def:"excessively fond; showing excessive love"},
+  {w:"DURING", def:"throughout the duration of"},
+  {w:"EYEING", def:"watching; looking at"},
+  {w:"FADING", def:"losing color or brightness; diminishing"},
+  {w:"FAKING", def:"making something false; pretending"},
+  {w:"FARING", def:"traveling; doing in a specified way"},
+  {w:"FAXING", def:"sending by facsimile machine"},
+  {w:"FILING", def:"storing documents; smoothing with a file"},
+  {w:"FINING", def:"imposing a penalty; clarifying wine"},
+  {w:"FIRING", def:"discharging a weapon; dismissing from a job"},
+  {w:"FIXING", def:"repairing; preparing; making permanent"},
+  {w:"FLYING", def:"traveling through air; moving fast"},
+  {w:"FOCING", def:"concentrating; directing attention"},
+  {w:"FUSING", def:"merging; melting together"},
+  {w:"GAMING", def:"playing games; gambling"},
+  {w:"GAZING", def:"looking steadily at something"},
+  {w:"GIVING", def:"providing to others; generous"},
+  {w:"GLUING", def:"bonding with adhesive"},
+  {w:"GOING",  def:"traveling; current state"},
+  {w:"GRADING",def:"assessing quality; leveling ground"},
+  {w:"HAVING", def:"possessing; experiencing"},
+  {w:"HIDING", def:"concealing; keeping secret"},
+  {w:"HIKING", def:"walking long distances in nature"},
+  {w:"HIRING", def:"employing; renting"},
+  {w:"HONING", def:"sharpening; refining a skill"},
+  {w:"HOPING", def:"wishing for something desired"},
+  {w:"HOSING", def:"spraying with a hose"},
+  {w:"HUGGING", def:"embracing tightly"},
+  {w:"ICING",  def:"coating with sugar glaze; in hockey, shooting from one's own half"},
+  {w:"JOKING", def:"saying funny things; not serious"},
+  {w:"JUKING", def:"dodging; playing on a jukebox"},
+  {w:"LACING", def:"fastening with laces; adding a substance to a drink"},
+  {w:"LADING", def:"loading cargo"},
+  {w:"LAMING", def:"making lame"},
+  {w:"LASING", def:"emitting laser light"},
+  {w:"LAVING", def:"washing"},
+  {w:"LAZING", def:"spending time idly"},
+  {w:"LIKING", def:"finding agreeable; a preference"},
+  {w:"LIMING", def:"treating with lime; catching birds with birdlime"},
+  {w:"LINING", def:"covering the inside; an inner layer"},
+  {w:"LIVING", def:"alive; making a livelihood"},
+  {w:"LOSING", def:"failing to win; misplacing"},
+  {w:"LOVING", def:"feeling deep affection; affectionate"},
+  {w:"LURING", def:"attracting with bait; tempting"},
+  {w:"MAKING", def:"creating; causing"},
+  {w:"MATING", def:"pairing for reproduction"},
+  {w:"MAZING", def:"bewildering"},
+  {w:"MINING", def:"extracting minerals from the ground"},
+  {w:"MIRING", def:"getting stuck in wet ground"},
+  {w:"MIXING", def:"combining ingredients"},
+  {w:"MOPING", def:"being gloomy and listless"},
+  {w:"MOVING", def:"changing position; emotionally affecting"},
+  {w:"MUSING", def:"thinking deeply; a deep thought"},
+  {w:"NAMING", def:"giving a name to"},
+  {w:"NOTING", def:"observing and recording"},
+  {w:"OGLING", def:"staring at in a lecherous way"},
+  {w:"OILING", def:"lubricating with oil"},
+  {w:"OOZING", def:"slowly flowing; exuding"},
+  {w:"OPTING", def:"choosing; making a choice"},
+  {w:"PACING", def:"walking back and forth; setting a rate of speed"},
+  {w:"PAGING", def:"calling someone; turning pages"},
+  {w:"PALING", def:"becoming pale; a fence stake"},
+  {w:"PAVING", def:"covering with a hard surface"},
+  {w:"PAYING", def:"giving money for goods or services"},
+  {w:"PIKING", def:"spiking; moving quickly"},
+  {w:"PILING", def:"stacking; a structural post"},
+  {w:"PIPING", def:"tubes for conveying fluids; high-pitched sound"},
+  {w:"POKING", def:"pushing with a pointed object"},
+  {w:"POSING", def:"assuming a position; pretending"},
+  {w:"POLING", def:"propelling with poles"},
+  {w:"PORING", def:"studying carefully"},
+  {w:"POSING", def:"taking a position; pretending to be"},
+  {w:"PRYING", def:"inquiring too closely; using a lever"},
+  {w:"RACING", def:"competing in speed; moving fast"},
+  {w:"RAGING", def:"feeling intense anger; very intense"},
+  {w:"RAKING", def:"gathering with a rake; searching"},
+  {w:"RATING", def:"assessing quality; a classification"},
+  {w:"RAVING", def:"talking wildly; enthusiastic praise"},
+  {w:"RAZING", def:"demolishing completely"},
+  {w:"RIDING", def:"sitting on and controlling a horse or vehicle"},
+  {w:"RISING", def:"moving upward; increasing; a rebellion"},
+  {w:"ROBING", def:"dressing in robes"},
+  {w:"ROPING", def:"catching with a rope"},
+  {w:"ROVING", def:"wandering; a bundle of textile fibers"},
+  {w:"RUKING", def:"variant of rucking"},
+  {w:"RULING", def:"governing; a decision or principle"},
+  {w:"RUSING", def:"using a ruse; deceiving"},
+  {w:"SAVING", def:"rescuing; accumulating money"},
+  {w:"SEWING", def:"joining with needle and thread"},
+  {w:"SEXING", def:"determining the sex of"},
+  {w:"SHYING", def:"being timid; throwing"},
+  {w:"SIDING", def:"supporting a person; exterior cladding"},
+  {w:"SIRING", def:"fathering offspring"},
+  {w:"SITING", def:"locating or placing"},
+  {w:"SIZING", def:"measuring; applying size to a surface"},
+  {w:"SKIING", def:"traveling on skis"},
+  {w:"SLUING", def:"turning or swinging"},
+  {w:"SOAKING",def:"saturating; submerging in liquid"},
+  {w:"SPYING", def:"watching secretly; working as a spy"},
+  {w:"SUING",  def:"taking legal action against"},
+  {w:"TAPING", def:"fastening with tape; recording"},
+  {w:"TARING", def:"deducting the weight of a container"},
+  {w:"TAXING", def:"imposing taxes; burdensome"},
+  {w:"TILING", def:"laying tiles"},
+  {w:"TIMING", def:"measuring or recording time; choosing the right moment"},
+  {w:"TIRING", def:"becoming weary; causing fatigue"},
+  {w:"TONING", def:"giving firmness or color to"},
+  {w:"TOYING", def:"playing casually; treating without seriousness"},
+  {w:"TUBING", def:"a system of tubes; going tubing on water"},
+  {w:"TUNING", def:"adjusting to correct pitch; optimizing"},
+  {w:"TYPING", def:"writing with a keyboard"},
+  {w:"USING",  def:"employing for a purpose"},
+  {w:"VEXING", def:"causing annoyance or distress"},
+  {w:"VYING",  def:"competing; contending"},
+  {w:"WADING", def:"walking through shallow water"},
+  {w:"WAKING", def:"ceasing to sleep; keeping watch over"},
+  {w:"WANING", def:"decreasing in strength or extent"},
+  {w:"WAVING", def:"moving the hand as a greeting; undulating"},
+  {w:"WAXING", def:"applying wax; increasing"},
+  {w:"WIRING", def:"installing electrical wires"},
+  {w:"WISING", def:"becoming wise (usually 'wising up')"},
+  {w:"WOOING", def:"seeking the affection of"},
+  {w:"ZONING", def:"dividing into zones; entering a focused state"},
+  // 7-letter (bingo territory)
+  {w:"AMAZING", def:"causing wonder; astonishingly good"},
+  {w:"BLAZING", def:"burning fiercely; very hot"},
+  {w:"BRACING", def:"holding firmly; cold and invigorating"},
+  {w:"CHASING", def:"pursuing; driving away"},
+  {w:"CLOSING", def:"shutting; coming to an end"},
+  {w:"COSTING", def:"having a price; causing the loss of"},
+  {w:"CRAVING", def:"a strong desire; feeling intense longing"},
+  {w:"CRUISING",def:"traveling at steady speed; looking for a partner"},
+  {w:"DANCING", def:"moving rhythmically to music"},
+  {w:"DASHING", def:"moving quickly; stylish and attractive"},
+  {w:"DEALING", def:"distributing; trading; handling"},
+  {w:"DIALING", def:"using a phone dial; turning a dial"},
+  {w:"DRAWING", def:"making pictures; pulling toward"},
+  {w:"DRIVING", def:"operating a vehicle; compelling"},
+  {w:"EARNING", def:"receiving payment for work"},
+  {w:"ERASING", def:"removing marks; obliterating"},
+  {w:"EASTING", def:"movement or distance toward the east"},
+  {w:"FASTING", def:"abstaining from food"},
+  {w:"FEELING", def:"sensing by touch; an emotion"},
+  {w:"FILLING", def:"making full; a substance used to fill"},
+  {w:"FINDING", def:"discovering; a conclusion or verdict"},
+  {w:"FISHING", def:"catching fish; searching for"},
+  {w:"FIZZING", def:"making a hissing bubbling sound"},
+  {w:"FLOWING", def:"moving steadily; running smoothly"},
+  {w:"FOOLING", def:"deceiving; joking"},
+  {w:"FORCING", def:"compelling by physical power"},
+  {w:"FORMING", def:"giving shape to; coming into being"},
+  {w:"FROZING", def:"becoming ice; being very cold"},
+  {w:"GLARING", def:"staring angrily; very obvious"},
+  {w:"GLAZING", def:"fitting with glass; applying a glaze"},
+  {w:"GLOWING", def:"emitting light; showing warmth"},
+  {w:"GRAZING", def:"feeding on grass; touching lightly"},
+  {w:"GUIDING", def:"showing the way; directing"},
+  {w:"GUSHING", def:"flowing out suddenly; effusive praise"},
+  {w:"HALTING", def:"coming to a stop; hesitant"},
+  {w:"HANGING", def:"suspending from above; executing by hanging"},
+  {w:"HUNTING", def:"pursuing and killing wild animals"},
+  {w:"HURTING", def:"causing pain"},
+  {w:"INKING",  def:"applying ink to"},
+  {w:"JOLTING", def:"moving with a sudden sharp jerk"},
+  {w:"JUMPING", def:"springing off the ground"},
+  {w:"JILTING", def:"suddenly abandoning a romantic partner"},
+  {w:"LACKING", def:"not having; being without"},
+  {w:"LANDING", def:"coming to ground; a platform at stairs"},
+  {w:"LASTING", def:"continuing for a long time; durable"},
+  {w:"LEAPING", def:"jumping; springing"},
+  {w:"LOADING", def:"placing cargo; transferring data"},
+  {w:"LOCKING", def:"fastening with a lock"},
+  {w:"LOOKING", def:"directing the eyes; appearing"},
+  {w:"LOOPING", def:"forming into a loop; flying in a loop"},
+  {w:"MAPPING", def:"making a map; planning in detail"},
+  {w:"MARKING", def:"making a mark; grading"},
+  {w:"MELTING", def:"changing from solid to liquid; softening"},
+  {w:"MENDING", def:"repairing; improving"},
+  {w:"MISSING", def:"failing to hit; absent; longing for"},
+  {w:"MOLDING", def:"shaping; a decorative strip"},
+  {w:"NESTING", def:"building a nest; fitting compactly"},
+  {w:"NOTHING", def:"not anything; zero"},
+  {w:"NURSING", def:"caring for the sick; breastfeeding"},
+  {w:"OPENING", def:"making an aperture; the beginning of"},
+  {w:"ORATING", def:"making a formal speech"},
+  {w:"PADDING", def:"soft filling material; walking softly"},
+  {w:"PARKING", def:"leaving a vehicle temporarily"},
+  {w:"PASSING", def:"going by; meeting requirements"},
+  {w:"PASTING", def:"applying with paste; computing paste"},
+  {w:"PAUSING", def:"stopping temporarily"},
+  {w:"PLACING", def:"putting in a position"},
+  {w:"PLAYING", def:"engaging in recreation; performing music"},
+  {w:"POSTING", def:"sending mail; placing online; a job position"},
+  {w:"PRICING", def:"setting a price for"},
+  {w:"PROVING", def:"demonstrating the truth of"},
+  {w:"PULLING", def:"drawing toward; exerting force"},
+  {w:"PUSHING", def:"applying force away from oneself"},
+  {w:"PUTTING", def:"placing; a golf stroke"},
+  {w:"RACKING", def:"putting on a rack; tormenting"},
+  {w:"RAISING", def:"lifting; increasing; rearing children"},
+  {w:"RANKING", def:"assigning a position in a hierarchy"},
+  {w:"READING", def:"interpreting written symbols"},
+  {w:"RESTING", def:"relaxing; not moving"},
+  {w:"ROARING", def:"making a loud deep sound"},
+  {w:"ROLLING", def:"moving by rotating; a cylindrical shape"},
+  {w:"ROOTING", def:"establishing roots; searching"},
+  {w:"RUNNING", def:"moving swiftly; managing"},
+  {w:"SAILING", def:"traveling by wind-powered vessel"},
+  {w:"SCALING", def:"climbing; adjusting size proportionally"},
+  {w:"SCORING", def:"gaining points; making cuts"},
+  {w:"SEEKING", def:"trying to find"},
+  {w:"SENDING", def:"causing to go; transmitting"},
+  {w:"SERVING", def:"working for; hitting a ball to begin play"},
+  {w:"SETTING", def:"placing; a background; hardening"},
+  {w:"SHINING", def:"emitting light; polishing"},
+  {w:"SHOWING", def:"displaying; proving"},
+  {w:"SINGING", def:"producing musical tones with the voice"},
+  {w:"SITTING", def:"resting on a seat; posing"},
+  {w:"SKATING", def:"gliding on ice or wheels"},
+  {w:"SOLVING", def:"finding the answer to"},
+  {w:"SORTING", def:"arranging in categories"},
+  {w:"SPACING", def:"arranging with spaces between"},
+  {w:"STAGING", def:"presenting theatrically; a platform"},
+  {w:"STARING", def:"gazing fixedly"},
+  {w:"STATING", def:"expressing in words"},
+  {w:"STAYING", def:"remaining; stopping"},
+  {w:"STORING", def:"keeping for future use"},
+  {w:"STYLING", def:"arranging in a particular style"},
+  {w:"SURFING", def:"riding waves; browsing the internet"},
+  {w:"SWAYING", def:"moving slowly from side to side"},
+  {w:"TALKING", def:"communicating by speech"},
+  {w:"TASTING", def:"perceiving flavor; sampling"},
+  {w:"TESTING", def:"examining; trying out"},
+  {w:"TILTING", def:"sloping; jousting"},
+  {w:"TOPPING", def:"exceeding; the uppermost part"},
+  {w:"TOSSING", def:"throwing lightly; moving restlessly"},
+  {w:"TOURING", def:"traveling for pleasure or performance"},
+  {w:"TRACING", def:"copying by drawing over; tracking"},
+  {w:"TRADING", def:"buying and selling; exchanging"},
+  {w:"TRAINED", def:"having undergone training"},
+  {w:"TURNING", def:"rotating; changing direction"},
+  {w:"VALUING", def:"estimating worth; regarding highly"},
+  {w:"VARYING", def:"changing; being different"},
+  {w:"VIEWING", def:"watching; a showing"},
+  {w:"VOICING", def:"expressing; giving voice to"},
+  {w:"VOTING",  def:"casting a ballot"},
+  {w:"WASTING", def:"using carelessly; becoming thinner"},
+  {w:"WISHING", def:"desiring; hoping for"},
+  {w:"WORKING", def:"doing a job; functioning"},
+  {w:"WRITING", def:"forming written words; composing"},
+  {w:"YELLING", def:"crying out loudly"},
+  {w:"ZAPPING", def:"destroying quickly; channel-surfing"},
+  {w:"ZEROING", def:"adjusting to zero; focusing on a target"},
+  {w:"ZIGZAGGING",def:"moving in a zigzag pattern"},
+  {w:"ZOOMING", def:"moving very quickly; using a zoom lens"},
+].map(e=>({...e, score:score(e.w)})).filter(e=>e.w.endsWith('ING'));
+
+let allWords = [...ING_WORDS];
+let sortMode = 'len';
+
+function setSortMode(m){ sortMode=m; filterAndRender(document.getElementById('filterInput').value); }
+
+function filterAndRender(q){
+  const u=q.toUpperCase().trim();
+  allWords = ING_WORDS.filter(e=>!u||e.w.includes(u));
+  render();
+}
+
+function render(){
+  // Sort
+  const sorted = [...allWords].sort((a,b)=>{
+    if(sortMode==='score') return b.score-a.score;
+    if(sortMode==='alpha') return a.w.localeCompare(b.w);
+    return a.w.length-b.w.length||b.score-a.score;
+  });
+
+  // Stats
+  document.getElementById('totalCount').textContent=sorted.length;
+  document.getElementById('bingoCount').textContent=sorted.filter(e=>e.w.length>=7).length;
+  const top=sorted.reduce((m,e)=>e.score>m?e.score:m,0);
+  document.getElementById('topScore').textContent=top+'pts';
+
+  const container=document.getElementById('wordContainer');
+  container.innerHTML='';
+
+  if(sortMode==='len'){
+    const groups={};
+    sorted.forEach(e=>{(groups[e.w.length]=groups[e.w.length]||[]).push(e);});
+    Object.keys(groups).sort((a,b)=>+a-+b).forEach(len=>{
+      const section=document.createElement('div');
+      section.className='length-section';
+      section.innerHTML=`<div class="len-head"><span class="len-badge">${len} letters</span>${len}&#8209;Letter Words · ${groups[len].length} words</div><div class="word-grid" id="grid-${len}"></div>`;
+      container.appendChild(section);
+      const grid=section.querySelector('.word-grid');
+      groups[len].sort((a,b)=>b.score-a.score).forEach(e=>grid.appendChild(makeChip(e)));
+    });
+  } else {
+    const grid=document.createElement('div');
+    grid.className='word-grid';
+    sorted.forEach(e=>grid.appendChild(makeChip(e)));
+    container.appendChild(grid);
+  }
+
+  // Top scores sidebar
+  const topSorted=[...ING_WORDS].sort((a,b)=>b.score-a.score).slice(0,8);
+  document.getElementById('topScores').innerHTML=topSorted.map(e=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);">
+      <div style="font-family:'DM Mono',monospace;font-size:13px;font-weight:600;">${e.w}</div>
+      <div style="font-size:11px;color:var(--rust);font-family:'DM Mono',monospace;font-weight:700;">${e.score}pts</div>
+    </div>
+  `).join('');
+}
+
+function makeChip(e){
+  const chip=document.createElement('div');
+  chip.className=`ing-chip${e.score>=15?' premium':''}`;
+  const root=e.w.slice(0,-3);
+  chip.innerHTML=`<span>${root}</span><span class="root">ING</span>${e.score>=12?`<span class="pts">${e.score}</span>`:''}`;
+  chip.title=e.def;
+  chip.addEventListener('click',()=>showToast(`${e.w} (${e.score}pts): ${e.def}`));
+  return chip;
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Unscrambler — Unscramble Any Word Instantly | WordUnscrambler</title>
+<meta name="description" content="Free word unscrambler — instantly find all words hidden in your scrambled letters. Perfect for Scrabble, Words with Friends, Wordle, and crossword puzzles.">
+<meta name="keywords" content="word unscrambler, unscramble words, scrabble word finder, words with friends cheat, anagram solver">
+<link rel="canonical" href="https://wordunscrambler.io/">
+<link rel="stylesheet" href="css/shared.css">
+<style>
+  .results-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+  .results-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; }
+  .results-count { font-size:12px; color:var(--muted); font-family:'DM Mono',monospace; }
+
+  .stats-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
+  .stat-chip {
+    background:var(--cream); border:1px solid var(--border); border-radius:20px;
+    padding:5px 14px; font-size:12px; color:var(--muted); font-family:'DM Mono',monospace;
+  }
+  .stat-chip strong { color:var(--ink); }
+
+  .seo-block { margin-top:36px; }
+  .seo-block h2 { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:10px; }
+  .seo-block h3 { font-size:14px; font-weight:600; margin:16px 0 6px; }
+  .seo-block p, .seo-block li { font-size:14px; color:var(--muted); line-height:1.7; }
+  .seo-block ul { padding-left:18px; }
+
+  .quick-links { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .qlink {
+    padding:5px 12px; border:1px solid var(--border); border-radius:6px;
+    font-size:12px; color:var(--muted); text-decoration:none;
+    transition:all .15s; font-family:'DM Mono',monospace;
+  }
+  .qlink:hover { border-color:var(--amber); color:var(--amber); background:var(--amber-pale); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <a class="nav-logo" href="index.html">Word<span>Unscrambler</span></a>
+  <div class="nav-links">
+    <a class="nav-link active" href="index.html">Unscrambler</a>
+    <a class="nav-link" href="wordle.html">Wordle Solver</a>
+    <a class="nav-link" href="pages/high-value-words.html">High-Value Words</a>
+    <a class="nav-link" href="pages/two-letter-words.html">2-Letter Words</a>
+    <a class="nav-link" href="pages/words-with-q.html">Words with Q</a>
+    <a class="nav-link" href="pages/words-with-z.html">Words with Z</a>
+    <a class="nav-link" href="pages/words-with-x.html">Words with X</a>
+    <a class="nav-link" href="pages/words-ending-in-ing.html">-ING Words</a>
+      <a class="nav-link" href="pages/words-with-j.html">Words with J</a>
+      <a class="nav-link" href="pages/words-ending-in-er.html">-ER Words</a>
+      <a class="nav-link" href="pages/scrabble-word-finder.html">Word Finder</a>
+  </div>
+</nav>
+
+<!-- TOP AD -->
+<div style="padding:10px 24px; background:var(--white); border-bottom:1px solid var(--border); position:relative; z-index:1;">
+  <div class="ad-unit ad-728x90">
+    <!-- AdSense: replace with <ins class="adsbygoogle" ...> -->
+    Advertisement · 728×90
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="page-header">
+  <h1 class="page-title">Word <em>Unscrambler</em></h1>
+  <p class="page-subtitle">Instantly find every word in your scrambled letters — sorted by length &amp; Scrabble value</p>
+</div>
+
+<div class="page-wrap">
+  <div class="main-col">
+
+    <!-- SEARCH CARD -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-title">Enter Scrambled Letters</div>
+      <div class="card-hint">Up to 15 letters · Wildcards: use ? for blank tiles</div>
+      <div class="input-row">
+        <input class="text-input" id="letterInput" type="text" maxlength="15"
+          placeholder="e.g. RETAWS" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="btn btn-primary" id="goBtn">Unscramble →</button>
+      </div>
+      <div class="filter-row">
+        <div class="filter-group">
+          <label>Starts:</label>
+          <input type="text" id="fStart" maxlength="3" placeholder="A" style="width:48px">
+        </div>
+        <div class="filter-group">
+          <label>Ends:</label>
+          <input type="text" id="fEnd" maxlength="3" placeholder="S" style="width:48px">
+        </div>
+        <div class="filter-group">
+          <label>Contains:</label>
+          <input type="text" id="fContains" maxlength="4" placeholder="ER" style="width:56px">
+        </div>
+        <div class="filter-group">
+          <label>Min length:</label>
+          <select id="fMinLen">
+            <option value="2">2+</option>
+            <option value="3" selected>3+</option>
+            <option value="4">4+</option>
+            <option value="5">5+</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Dictionary:</label>
+          <select id="fDict">
+            <option value="twl">TWL (Scrabble US)</option>
+            <option value="sowpods">SOWPODS (Int'l)</option>
+            <option value="wwf">Words w/ Friends</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOADER -->
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      <div>Searching dictionary…</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="resultsWrap" style="display:none;">
+      <div class="results-header">
+        <div class="results-title" id="resTitle">Results</div>
+        <div class="results-count" id="resCount"></div>
+      </div>
+      <div class="stats-row" id="statsRow"></div>
+      <div class="tab-row" id="tabRow"></div>
+      <div class="def-panel" id="defPanel"></div>
+      <div id="wordGroups"></div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState">
+      <span class="empty-icon">🔤</span>
+      <h2>Enter letters above to begin</h2>
+      <p>Type up to 15 letters and see every word you can make — sorted by length and Scrabble point value.</p>
+      <div class="quick-links" style="justify-content:center; margin-top:20px;">
+        <a class="qlink" href="#" data-demo="RETAWS">Try RETAWS</a>
+        <a class="qlink" href="#" data-demo="PLAYING">Try PLAYING</a>
+        <a class="qlink" href="#" data-demo="QUARTZ">Try QUARTZ</a>
+        <a class="qlink" href="#" data-demo="STRANGE">Try STRANGE</a>
+      </div>
+    </div>
+
+    <!-- SEO CONTENT -->
+    <div class="seo-block card-sm" style="margin-top:28px;">
+      <h2>How to Use the Word Unscrambler</h2>
+      <p>Our free tool searches a dictionary of <strong>3,000+ common English words</strong> to find every valid word hidden in your scrambled letters in under a second.</p>
+      <h3>Step-by-step</h3>
+      <ul>
+        <li>Type your scrambled letters into the input box (up to 15 letters)</li>
+        <li>Use <strong>?</strong> for blank Scrabble tiles</li>
+        <li>Optionally filter by starting letter, ending, or required substring</li>
+        <li>Click any word chip to see its definition and Scrabble point value</li>
+        <li>Results are sorted longest → shortest, then by point value within each length</li>
+      </ul>
+      <h3>Why use a word unscrambler?</h3>
+      <ul>
+        <li>Stuck in <strong>Scrabble</strong> or <strong>Words with Friends</strong>? Find the highest-scoring play</li>
+        <li>Solving <strong>crossword</strong> clues with known letters</li>
+        <li>Teaching vocabulary and letter patterns to kids</li>
+        <li>Brain training and mental exercise</li>
+      </ul>
+    </div>
+
+    <!-- BOTTOM AD -->
+    <div style="margin-top:32px; text-align:center;">
+      <div class="ad-unit ad-728x90">Advertisement · 728×90</div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="ad-unit ad-300x250">Advertisement · 300×250</div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif; font-size:16px; margin-bottom:10px;">Quick Tools</h3>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a href="wordle.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); padding:10px; border-radius:8px; border:1px solid var(--border); font-size:13px; transition:all .15s;" onmouseover="this.style.borderColor='var(--amber)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span style="font-size:20px;">🟩</span>
+          <div><div style="font-weight:600;">Wordle Solver</div><div style="color:var(--muted); font-size:11px;">Find the answer in 3 guesses</div></div>
+        </a>
+        <a href="pages/high-value-words.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); padding:10px; border-radius:8px; border:1px solid var(--border); font-size:13px; transition:all .15s;" onmouseover="this.style.borderColor='var(--amber)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span style="font-size:20px;">⭐</span>
+          <div><div style="font-weight:600;">High-Value Words</div><div style="color:var(--muted); font-size:11px;">Q, Z, X, J words to memorize</div></div>
+        </a>
+        <a href="pages/two-letter-words.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); padding:10px; border-radius:8px; border:1px solid var(--border); font-size:13px; transition:all .15s;" onmouseover="this.style.borderColor='var(--amber)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span style="font-size:20px;">✌️</span>
+          <div><div style="font-weight:600;">2-Letter Words</div><div style="color:var(--muted); font-size:11px;">All 107 legal Scrabble words</div></div>
+        </a>
+      </div>
+    </div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif; font-size:15px; margin-bottom:10px;">Scrabble Tip</h3>
+      <p style="font-size:13px; color:var(--muted); line-height:1.65;" id="scrabbleTip">Loading tip…</p>
+    </div>
+
+    <div class="ad-unit ad-300x600">Advertisement · 300×600</div>
+  </aside>
+</div>
+
+<footer class="site-footer">
+  <a href="index.html">Home</a>
+  <a href="wordle.html">Wordle Solver</a>
+  <a href="pages/high-value-words.html">High-Value Words</a>
+  <a href="pages/two-letter-words.html">2-Letter Words</a>
+  <a href="pages/words-with-q.html">Words with Q</a>
+  <a href="pages/words-with-z.html">Words with Z</a>
+  <span>© 2026 WordUnscrambler.io</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/dictionary.js"></script>
+<script>
+// ── Scrabble tips ──
+const TIPS = [
+  "The letters Q, Z, X, and J are worth 10, 10, 8, and 8 points each. Save them for premium squares.",
+  "Playing all 7 tiles earns a 50-point BINGO bonus — worth more than any single square.",
+  "QI, ZA, and XI are 2-letter powerhouses that let you play Q and Z without a U.",
+  "Controlling the center of the board restricts your opponent's access to triple-word squares.",
+  "Parallel plays — running words alongside existing ones — often score far more than longer words.",
+  "The suffix -ING turns almost any verb into a 7-letter word for a potential bingo.",
+  "ETAOINSR are the most common English letters — keep these in your rack for flexibility.",
+  "Hooks: learning words that accept a single letter on either end opens up the whole board.",
+];
+document.getElementById('scrabbleTip').textContent = TIPS[Math.floor(Math.random() * TIPS.length)];
+
+// ── Core logic ──
+function getFreq(str) {
+  const f = {};
+  for (const c of str.toUpperCase()) f[c] = (f[c]||0)+1;
+  return f;
+}
+
+function canMake(word, freq, wildcards) {
+  const needed = getFreq(word);
+  let wild = wildcards;
+  for (const [c,n] of Object.entries(needed)) {
+    const have = freq[c] || 0;
+    if (have >= n) continue;
+    const gap = n - have;
+    if (wild >= gap) { wild -= gap; } else return false;
+  }
+  return true;
+}
+
+function doSearch(raw, startsWith='', endsWith='', contains='', minLen=3) {
+  const clean = raw.toUpperCase().replace(/[^A-Z?]/g,'');
+  const letters = clean.replace(/\?/g,'');
+  const wildcards = (clean.match(/\?/g)||[]).length;
+  const freq = getFreq(letters);
+
+  const sw = startsWith.toUpperCase();
+  const ew = endsWith.toUpperCase();
+  const ct = contains.toUpperCase();
+
+  const results = [];
+  for (const word of window.DICT.DICTIONARY) {
+    if (word.length < minLen) continue;
+    if (sw && !word.startsWith(sw)) continue;
+    if (ew && !word.endsWith(ew)) continue;
+    if (ct && !word.includes(ct)) continue;
+    if (canMake(word, freq, wildcards)) results.push(word);
+  }
+
+  return results.sort((a,b) =>
+    b.length - a.length || window.DICT.scrabbleScore(b) - window.DICT.scrabbleScore(a)
+  );
+}
+
+// ── State ──
+let allWords = [];
+let activeLen = 'all';
+
+// ── Render ──
+function renderResults(words) {
+  document.getElementById('loader').classList.remove('on');
+  document.getElementById('emptyState').style.display = 'none';
+  const wrap = document.getElementById('resultsWrap');
+  wrap.style.display = 'block';
+
+  const filtered = activeLen === 'all' ? words : words.filter(w => w.length === activeLen);
+  const raw = document.getElementById('letterInput').value.toUpperCase().replace(/[^A-Z?]/g,'');
+
+  document.getElementById('resTitle').textContent = `Words from "${raw}"`;
+  document.getElementById('resCount').textContent = `${filtered.length.toLocaleString()} word${filtered.length!==1?'s':''} found`;
+
+  // Stats
+  const statsRow = document.getElementById('statsRow');
+  const lens = [...new Set(words.map(w=>w.length))].sort((a,b)=>b-a);
+  const bestScore = words.reduce((m,w)=>Math.max(m,window.DICT.scrabbleScore(w)),0);
+  const best = words.find(w=>window.DICT.scrabbleScore(w)===bestScore);
+  statsRow.innerHTML = `
+    <div class="stat-chip"><strong>${words.length}</strong> total words</div>
+    <div class="stat-chip">Lengths: <strong>${lens.join(', ')}</strong></div>
+    ${best?`<div class="stat-chip">Best score: <strong>${best}</strong> (${bestScore}pts)</div>`:''}
+    <div class="stat-chip">${words.filter(w=>w.length>=7).length} <strong>7+</strong> letter words</div>
+  `;
+
+  // Tabs
+  const tabRow = document.getElementById('tabRow');
+  tabRow.innerHTML =
+    `<button class="tab${activeLen==='all'?' active':''}" data-l="all">All (${words.length})</button>` +
+    lens.map(l => {
+      const n = words.filter(w=>w.length===l).length;
+      return `<button class="tab${activeLen===l?' active':''}" data-l="${l}">${l}-letter (${n})</button>`;
+    }).join('');
+
+  tabRow.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    activeLen = t.dataset.l === 'all' ? 'all' : parseInt(t.dataset.l);
+    renderResults(allWords);
+  }));
+
+  // Groups
+  const wordGroups = document.getElementById('wordGroups');
+  wordGroups.innerHTML = '';
+
+  if (filtered.length === 0) {
+    wordGroups.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">No words match your filters.</div>';
+    return;
+  }
+
+  const grouped = {};
+  filtered.forEach(w => { (grouped[w.length]=grouped[w.length]||[]).push(w); });
+
+  Object.keys(grouped).sort((a,b)=>b-a).forEach(len => {
+    const grp = document.createElement('div');
+    grp.className = 'word-group';
+    grp.innerHTML = `<div class="group-label">${len}-letter words · ${grouped[len].length} words</div><div class="words-grid"></div>`;
+    const grid = grp.querySelector('.words-grid');
+    grouped[len].forEach(word => {
+      const score = window.DICT.scrabbleScore(word);
+      const hi = score >= 14;
+      const chip = document.createElement('div');
+      chip.className = `word-chip${hi?' high-val':''}`;
+      chip.textContent = word;
+      if (score >= 10) chip.innerHTML += `<span class="score-pip">${score}</span>`;
+      chip.addEventListener('click', () => showDef(word));
+      grid.appendChild(chip);
+    });
+    wordGroups.appendChild(grp);
+  });
+}
+
+function showDef(word) {
+  const score = window.DICT.scrabbleScore(word);
+  const panel = document.getElementById('defPanel');
+  panel.className = 'def-panel on';
+  panel.innerHTML = `
+    <div class="def-word">${word}</div>
+    <div class="def-pos">noun / verb / adjective</div>
+    <div class="def-text">Valid word in standard dictionaries.</div>
+    <div class="def-score">Scrabble value: <strong>${score} points</strong> — click to copy</div>
+  `;
+  navigator.clipboard?.writeText(word).then(() => showToast(`Copied "${word}"`));
+  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function go() {
+  const val = document.getElementById('letterInput').value.trim();
+  if (!val || val.length < 2) { showToast('Enter at least 2 letters'); return; }
+  activeLen = 'all';
+  document.getElementById('defPanel').className = 'def-panel';
+  document.getElementById('resultsWrap').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('loader').classList.add('on');
+
+  const sw = document.getElementById('fStart').value.trim();
+  const ew = document.getElementById('fEnd').value.trim();
+  const ct = document.getElementById('fContains').value.trim();
+  const ml = parseInt(document.getElementById('fMinLen').value);
+
+  setTimeout(() => {
+    allWords = doSearch(val, sw, ew, ct, ml);
+    renderResults(allWords);
+  }, 180);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── Events ──
+document.getElementById('goBtn').addEventListener('click', go);
+document.getElementById('letterInput').addEventListener('keydown', e => { if(e.key==='Enter') go(); });
+document.getElementById('letterInput').addEventListener('input', function() {
+  this.value = this.value.replace(/[^a-zA-Z?]/g,'');
+});
+
+// Demo links
+document.querySelectorAll('[data-demo]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('letterInput').value = el.dataset.demo;
+    go();
+  });
+});
+
+// Auto-run demo
+setTimeout(() => {
+  document.getElementById('letterInput').value = 'STRANGE';
+  go();
+}, 300);
+</script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All 2-Letter Scrabble Words — Complete Official List | WordUnscrambler</title>
+<meta name="description" content="Complete list of all 107 official 2-letter Scrabble words. Memorize these and you'll always have a play — even with the worst rack. Updated for TWL and SOWPODS.">
+<meta name="keywords" content="2 letter scrabble words, two letter words scrabble, all 2 letter words, scrabble two letter words list, valid 2 letter words">
+<link rel="canonical" href="https://wordunscrambler.io/pages/two-letter-words">
+<link rel="stylesheet" href="../css/shared.css">
+<style>
+  .alpha-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .two-chip {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .15s;
+  }
+
+  .two-chip:hover {
+    border-color: var(--amber);
+    background: var(--amber-pale);
+    transform: translateY(-1px);
+  }
+
+  .two-chip .tw { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .two-chip .pts { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
+  .two-chip.hi-val { border-color: var(--rust); background: #fff5f2; }
+  .two-chip.hi-val .pts { color: var(--rust); }
+
+  .alpha-section { margin-bottom: 28px; }
+  .alpha-header {
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900;
+    color: var(--ink); margin-bottom: 12px;
+    border-left: 4px solid var(--amber); padding-left: 12px;
+  }
+
+  .search-filter {
+    display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;
+  }
+
+  .stats-band {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 20px;
+    display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+
+  .stat { text-align: center; }
+  .stat-n { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; color: var(--amber); line-height: 1; }
+  .stat-l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="../index.html">Word<span>Unscrambler</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="../index.html">Unscrambler</a>
+    <a class="nav-link" href="../wordle.html">Wordle Solver</a>
+    <a class="nav-link" href="high-value-words.html">High-Value Words</a>
+    <a class="nav-link active" href="two-letter-words.html">2-Letter Words</a>
+    <a class="nav-link" href="words-with-q.html">Words with Q</a>
+    <a class="nav-link" href="words-with-z.html">Words with Z</a>
+    <a class="nav-link" href="words-with-x.html">Words with X</a>
+    <a class="nav-link" href="words-ending-in-ing.html">-ING Words</a>
+      <a class="nav-link" href="words-with-j.html">Words with J</a>
+      <a class="nav-link" href="words-ending-in-er.html">-ER Words</a>
+      <a class="nav-link" href="scrabble-word-finder.html">Word Finder</a>
+  </div>
+</nav>
+
+<div style="padding:10px 24px; background:var(--white); border-bottom:1px solid var(--border); position:relative; z-index:1;">
+  <div class="ad-unit ad-728x90">Advertisement · 728×90</div>
+</div>
+
+<div class="page-header">
+  <h1 class="page-title">All <em>2-Letter</em> Scrabble Words</h1>
+  <p class="page-subtitle">The complete official TWL list — 107 words every Scrabble player must know</p>
+</div>
+
+<div class="page-wrap">
+  <div class="main-col">
+
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:15px; line-height:1.75;">Knowing all legal 2-letter words is the single biggest skill improvement available to a Scrabble player. They let you play <strong>parallel to existing words</strong>, hook onto board edges, and always have a backup when your rack is terrible. This is the complete TWL (Tournament Word List) for North American Scrabble.</p>
+    </div>
+
+    <div class="stats-band">
+      <div class="stat"><div class="stat-n" id="totalCount">107</div><div class="stat-l">Total Words</div></div>
+      <div class="stat"><div class="stat-n" id="highValCount">—</div><div class="stat-l">10+ Points</div></div>
+      <div class="stat"><div class="stat-n">26</div><div class="stat-l">Letters covered</div></div>
+      <div class="stat"><div class="stat-n">QI</div><div class="stat-l">Highest value</div></div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="search-filter">
+      <input type="text" id="filterInput" placeholder="Filter words…"
+        style="border:1.5px solid var(--border); border-radius:8px; padding:8px 14px; font-size:14px; font-family:'DM Mono',monospace; background:var(--white); outline:none; width:200px; text-transform:uppercase; letter-spacing:.06em;"
+        oninput="filterWords(this.value)">
+      <button class="btn btn-secondary btn-sm" onclick="sortBy('alpha')">Sort A–Z</button>
+      <button class="btn btn-secondary btn-sm" onclick="sortBy('score')">Sort by Score</button>
+      <button class="btn btn-secondary btn-sm" onclick="filterWords('')">Show All</button>
+    </div>
+
+    <div id="wordContainer"></div>
+
+    <!-- SEO blocks -->
+    <div class="card-sm" style="margin-top:16px;">
+      <h2 style="font-family:'Playfair Display',serif; font-size:20px; margin-bottom:12px;">Why 2-Letter Words Are Essential</h2>
+      <p style="font-size:14px; color:var(--muted); line-height:1.75; margin-bottom:10px;">Expert Scrabble players estimate that knowing 2-letter words is worth <strong>50–100 extra points per game</strong>. Here's why:</p>
+      <ul style="font-size:14px; color:var(--muted); line-height:1.9; padding-left:18px; margin-bottom:14px;">
+        <li><strong>Parallel plays</strong>: Place a word next to an existing one so each pair of touching letters forms a legal 2-letter word — you score both words</li>
+        <li><strong>Hooks</strong>: Extend any word by one letter when you can form a valid 2-letter word at the junction</li>
+        <li><strong>Rescue plays</strong>: Even the worst rack of letters usually contains at least one 2-letter combo you can play</li>
+        <li><strong>Board opening</strong>: Playing short words tactically keeps premium squares accessible for you later</li>
+      </ul>
+      <h3 style="font-size:14px; font-weight:600; margin-bottom:6px;">The Most Useful 2-Letter Words</h3>
+      <p style="font-size:14px; color:var(--muted); line-height:1.7;">The highest-value: <strong>QI (11)</strong>, <strong>ZA (11)</strong>, <strong>ZAX (though 3 letters)</strong>. Best vowel dumps: AA, AE, AI, OE, OI, OO. Best consonant plays: MM, SH, HM.</p>
+    </div>
+
+    <div style="margin-top:28px; text-align:center;">
+      <div class="ad-unit ad-728x90">Advertisement · 728×90</div>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="ad-unit ad-300x250">Advertisement · 300×250</div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif; font-size:15px; margin-bottom:10px;">Memorization Tips</h3>
+      <ul style="font-size:12px; color:var(--muted); line-height:1.8; padding-left:16px;">
+        <li>Learn the vowel pairs first: AA, AE, AI, OE, OI, OO</li>
+        <li>Memorize J, Q, X, Z words — they're rare and valuable</li>
+        <li>Practice with flashcard apps: AnkiApp works well</li>
+        <li>Note words ONLY in TWL vs. those also in SOWPODS</li>
+        <li>Use them in casual play to build muscle memory</li>
+      </ul>
+    </div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif; font-size:15px; margin-bottom:8px;">Words to Learn First</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;" id="topPriority"></div>
+    </div>
+
+    <div class="ad-unit ad-300x600">Advertisement · 300×600</div>
+  </aside>
+</div>
+
+<footer class="site-footer">
+  <a href="../index.html">Home</a>
+  <a href="../wordle.html">Wordle Solver</a>
+  <a href="high-value-words.html">High-Value Words</a>
+  <a href="two-letter-words.html">2-Letter Words</a>
+  <a href="words-with-q.html">Words with Q</a>
+  <a href="words-with-z.html">Words with Z</a>
+  <span>© 2026 WordUnscrambler.io</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="../js/dictionary.js"></script>
+<script>
+const SCORES = window.DICT.SCRABBLE_SCORES;
+
+const TWO_DATA = [
+  {w:'AA',def:'A type of rough lava'},
+  {w:'AB',def:'An abdominal muscle'},
+  {w:'AD',def:'An advertisement'},
+  {w:'AE',def:'One (Scottish)'},
+  {w:'AG',def:'Silver (chemistry); agriculture'},
+  {w:'AH',def:'Exclamation of surprise'},
+  {w:'AI',def:'A three-toed sloth'},
+  {w:'AL',def:'An East Indian tree'},
+  {w:'AM',def:'First person singular of "be"'},
+  {w:'AN',def:'Indefinite article before vowels'},
+  {w:'AR',def:'The letter R'},
+  {w:'AS',def:'To the same degree'},
+  {w:'AT',def:'Preposition indicating location'},
+  {w:'AW',def:'Exclamation of mild protest'},
+  {w:'AX',def:'A chopping tool'},
+  {w:'AY',def:'Yes; exclamation of pain'},
+  {w:'BA',def:'The soul in Egyptian mythology'},
+  {w:'BE',def:'To exist'},
+  {w:'BI',def:'Bisexual'},
+  {w:'BO',def:'A pal; body odor (informal)'},
+  {w:'BY',def:'Near; past; through the agency of'},
+  {w:'DA',def:'Father (informal)'},
+  {w:'DE',def:'Of (as in names)'},
+  {w:'DO',def:'A musical note; to perform'},
+  {w:'ED',def:'A male name; to edit'},
+  {w:'EF',def:'The letter F'},
+  {w:'EH',def:'An interjection requesting repetition'},
+  {w:'EL',def:'An elevated railroad'},
+  {w:'EM',def:'The letter M; a unit of typographic measure'},
+  {w:'EN',def:'The letter N; a unit of typographic measure'},
+  {w:'ER',def:'Expressing hesitation'},
+  {w:'ES',def:'Plural of the letter E'},
+  {w:'ET',def:'Past tense of eat (dialectal)'},
+  {w:'EW',def:'Exclamation of disgust'},
+  {w:'EX',def:'A former partner; the letter X'},
+  {w:'FA',def:'A musical note'},
+  {w:'FE',def:'A Hebrew letter'},
+  {w:'FI',def:'Variant of phi'},
+  {w:'GI',def:'A judo or karate uniform'},
+  {w:'GO',def:'To move; a Japanese board game'},
+  {w:'HA',def:'Exclamation of surprise or laughter'},
+  {w:'HE',def:'Third person masculine pronoun'},
+  {w:'HI',def:'A greeting'},
+  {w:'HM',def:'Interjection expressing thought'},
+  {w:'HO',def:'Exclamation; also a dialectal form of "whore"'},
+  {w:'ID',def:'The instinctual part of the psyche (Freudian)'},
+  {w:'IF',def:'On the condition that; a condition'},
+  {w:'IN',def:'Within; fashionable'},
+  {w:'IS',def:'Third person singular present of "be"'},
+  {w:'IT',def:'Third person neuter pronoun'},
+  {w:'JO',def:'A sweetheart (Scottish)'},
+  {w:'KA',def:'The spiritual double in Egyptian mythology'},
+  {w:'KI',def:'Variant of qi; the life force'},
+  {w:'LA',def:'A musical note'},
+  {w:'LI',def:'A Chinese unit of distance'},
+  {w:'LO',def:'Look! Behold!'},
+  {w:'MA',def:'Mother (informal)'},
+  {w:'ME',def:'First person object pronoun; a musical note'},
+  {w:'MI',def:'A musical note (third note of the scale)'},
+  {w:'MM',def:'Interjection of pleasure or thought'},
+  {w:'MO',def:'A moment; a medical doctor (informal)'},
+  {w:'MU',def:'The 12th letter of the Greek alphabet'},
+  {w:'MY',def:'First person possessive pronoun'},
+  {w:'NA',def:'No; not (Scottish and dialectal)'},
+  {w:'NE',def:'Born as (used with birth names)'},
+  {w:'NO',def:'A negative response; not any'},
+  {w:'NU',def:'The 13th letter of the Greek alphabet'},
+  {w:'OD',def:'To overdose (slang)'},
+  {w:'OE',def:'A whirlwind off the Faeroe Islands'},
+  {w:'OF',def:'Preposition showing relationship'},
+  {w:'OH',def:'Exclamation expressing surprise'},
+  {w:'OI',def:'Exclamation (British slang)'},
+  {w:'OM',def:'A sacred syllable in Hinduism and Buddhism'},
+  {w:'ON',def:'In contact with; active'},
+  {w:'OP',def:'An operation; optical'},
+  {w:'OR',def:'A conjunction; gold (heraldry)'},
+  {w:'OS',def:'A bone (plural ossa)'},
+  {w:'OW',def:'Exclamation of pain'},
+  {w:'OX',def:'An adult castrated bull'},
+  {w:'OY',def:'Exclamation of dismay (Yiddish)'},
+  {w:'PA',def:'Father (informal)'},
+  {w:'PE',def:'The 17th letter of the Hebrew alphabet'},
+  {w:'PI',def:'The 16th Greek letter; the mathematical constant 3.14159…'},
+  {w:'PO',def:'A chamber pot (British informal)'},
+  {w:'QI',def:'The life force in Chinese philosophy'},
+  {w:'RE',def:'A musical note; regarding; the second note'},
+  {w:'SH',def:'Hush! Be quiet!'},
+  {w:'SI',def:'A musical note; the seventh note of the scale'},
+  {w:'SO',def:'A musical note; thus; very'},
+  {w:'TA',def:'Thank you (British informal)'},
+  {w:'TI',def:'A plant; variant of SI (musical note)'},
+  {w:'TO',def:'Preposition toward; infinitive marker'},
+  {w:'UH',def:'Interjection expressing hesitation'},
+  {w:'UM',def:'Interjection expressing hesitation'},
+  {w:'UN',def:'One (dialectal)'},
+  {w:'UP',def:'In a higher place; to increase'},
+  {w:'UT',def:'The musical note C (in some systems)'},
+  {w:'WE',def:'First person plural pronoun'},
+  {w:'WO',def:'Variant of woe'},
+  {w:'XI',def:'The 14th letter of the Greek alphabet'},
+  {w:'XU',def:'A monetary unit of Vietnam (1/100 dong)'},
+  {w:'YA',def:'You (informal)'},
+  {w:'YE',def:'You (archaic plural); the'},
+  {w:'YO',def:'Hey! (exclamation)'},
+  {w:'ZA',def:'Pizza (informal)'},
+].map(entry => ({
+  ...entry,
+  score: [...entry.w].reduce((s,c) => s+(SCORES[c]||0), 0)
+}));
+
+let currentData = [...TWO_DATA];
+let currentSort = 'alpha';
+
+function scoreColor(score) {
+  if (score >= 11) return 'hi-val';
+  return '';
+}
+
+function render(data) {
+  document.getElementById('highValCount').textContent = data.filter(d=>d.score>=10).length;
+
+  // Group by first letter
+  const groups = {};
+  data.forEach(d => {
+    const key = d.w[0];
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(d);
+  });
+
+  const container = document.getElementById('wordContainer');
+  container.innerHTML = '';
+
+  if (currentSort === 'score') {
+    // Single grid sorted by score
+    const sorted = [...data].sort((a,b) => b.score-a.score);
+    const grid = document.createElement('div');
+    grid.className = 'alpha-grid';
+    sorted.forEach(d => {
+      const chip = document.createElement('div');
+      chip.className = `two-chip ${scoreColor(d.score)}`;
+      chip.innerHTML = `<div class="tw">${d.w}</div><div class="pts">${d.score}pts</div>`;
+      chip.title = d.def;
+      chip.addEventListener('click', () => {
+        showToast(`${d.w}: ${d.def} (${d.score}pts)`);
+      });
+      grid.appendChild(chip);
+    });
+    container.appendChild(grid);
+  } else {
+    // Grouped by letter
+    Object.keys(groups).sort().forEach(letter => {
+      const section = document.createElement('div');
+      section.className = 'alpha-section';
+      section.innerHTML = `<div class="alpha-header">${letter}</div>`;
+      const grid = document.createElement('div');
+      grid.className = 'alpha-grid';
+      groups[letter].sort((a,b) => a.w.localeCompare(b.w)).forEach(d => {
+        const chip = document.createElement('div');
+        chip.className = `two-chip ${scoreColor(d.score)}`;
+        chip.innerHTML = `<div class="tw">${d.w}</div><div class="pts">${d.score}pts</div>`;
+        chip.title = d.def;
+        chip.addEventListener('click', () => {
+          showToast(`${d.w}: ${d.def} (${d.score}pts)`);
+        });
+        grid.appendChild(chip);
+      });
+      section.appendChild(grid);
+      container.appendChild(section);
+    });
+  }
+
+  document.getElementById('totalCount').textContent = data.length;
+}
+
+function sortBy(mode) {
+  currentSort = mode;
+  render(currentData);
+}
+
+function filterWords(q) {
+  const u = q.toUpperCase().trim();
+  currentData = u ? TWO_DATA.filter(d => d.w.includes(u) || d.def.toLowerCase().includes(q.toLowerCase())) : [...TWO_DATA];
+  render(currentData);
+}
+
+// Top priority words for sidebar
+const TOP_PRIORITY = ['QI','ZA','XI','XU','JO','AA','AE','OE','AI','MM','SH','OX','EX'];
+document.getElementById('topPriority').innerHTML = TOP_PRIORITY.map(w => {
+  const score = [...w].reduce((s,c)=>s+(SCORES[c]||0),0);
+  return `<div style="background:var(--amber-pale);border:1px solid rgba(212,130,10,.3);border-radius:6px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;cursor:default;" title="${TWO_DATA.find(d=>d.w===w)?.def||''}">${w} <span style="font-size:10px;color:var(--muted);">${score}</span></div>`;
+}).join('');
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Init
+render(TWO_DATA);
+</script>
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wordle Solver — Find Today's Answer | WordUnscrambler</title>
+<meta name="description" content="Free Wordle solver. Enter your green, yellow, and gray clues and we'll narrow down every possible Wordle answer. Solve today's Wordle in 3 guesses.">
+<meta name="keywords" content="wordle solver, wordle helper, wordle cheat, wordle answer today, wordle hint">
+<link rel="canonical" href="https://wordunscrambler.io/wordle">
+<link rel="stylesheet" href="css/shared.css">
+<style>
+  /* ── Wordle-specific styles ── */
+  .solver-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .guess-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .guess-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    width: 52px;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    flex-shrink: 0;
+  }
+
+  .guess-tiles {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tile-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tile {
+    width: 54px;
+    height: 54px;
+    border: 2.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    text-align: center;
+    outline: none;
+    background: var(--white);
+    color: var(--ink);
+    transition: all .15s;
+    caret-color: var(--amber);
+  }
+
+  .tile:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(212,130,10,.15); }
+
+  /* State buttons */
+  .tile-state-btn {
+    width: 54px;
+    height: 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .tile-state-btn[data-state="gray"]   { background: #e0ddd8; color: #666; }
+  .tile-state-btn[data-state="yellow"] { background: #f5d56a; color: #7a5e00; }
+  .tile-state-btn[data-state="green"]  { background: #6aaa64; color: white; }
+
+  /* Apply color to tile based on state */
+  .tile[data-state="gray"]   { background: #d4d4d4; border-color: #aaa; color: #444; }
+  .tile[data-state="yellow"] { background: #f5d56a; border-color: #c9a600; color: #5a4000; }
+  .tile[data-state="green"]  { background: #6aaa64; border-color: #4a8a44; color: white; }
+
+  /* Remove row button */
+  .remove-row {
+    width: 28px; height: 28px;
+    background: none; border: 1px solid var(--border);
+    border-radius: 50%; cursor: pointer; color: var(--muted);
+    font-size: 14px; display: flex; align-items: center; justify-content: center;
+    transition: all .15s; flex-shrink: 0; margin-left: 4px;
+  }
+  .remove-row:hover { background: #ffe0e0; border-color: var(--rust); color: var(--rust); }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 20px; height: 20px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: white;
+  }
+
+  .legend-dot.g { background: #6aaa64; }
+  .legend-dot.y { background: #f5d56a; color: #5a4000; }
+  .legend-dot.x { background: #d4d4d4; color: #444; }
+
+  /* Controls */
+  .solver-controls {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  /* Also-known section */
+  .also-known {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Results */
+  .word-results {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+
+  .wordle-chip {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .wordle-chip:hover {
+    border-color: var(--sage);
+    background: #f0f7ef;
+    transform: translateY(-1px);
+  }
+
+  .wordle-chip.top-pick {
+    border-color: #6aaa64;
+    background: #f0f7ef;
+  }
+
+  .chip-freq {
+    font-size: 9px;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: .04em;
+  }
+
+  .chip-rank {
+    font-size: 9px;
+    color: #6aaa64;
+    font-weight: 600;
+  }
+
+  .result-count-bar {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .count-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1;
+  }
+
+  .count-text { font-size: 13px; color: var(--muted); }
+
+  /* Hard mode badge */
+  .hard-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #fff3cd; border: 1px solid #ffc107;
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; color: #856404;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Keyboard hint */
+  .kb-hint {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 13px; color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .kb-hint strong { color: var(--ink); }
+
+  /* Letter frequency bar chart */
+  .letter-analysis {
+    margin-top: 20px;
+  }
+
+  .freq-bar-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 5px;
+  }
+
+  .freq-letter {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 600;
+    width: 20px; text-align: center;
+    text-transform: uppercase;
+  }
+
+  .freq-bar {
+    height: 14px; border-radius: 3px;
+    background: var(--amber); opacity: .7;
+    transition: width .3s ease;
+  }
+
+  .freq-count {
+    font-size: 11px; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="nav-logo" href="index.html">Word<span>Unscrambler</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Unscrambler</a>
+    <a class="nav-link active" href="wordle.html">Wordle Solver</a>
+    <a class="nav-link" href="pages/high-value-words.html">High-Value Words</a>
+    <a class="nav-link" href="pages/two-letter-words.html">2-Letter Words</a>
+    <a class="nav-link" href="pages/words-with-q.html">Words with Q</a>
+    <a class="nav-link" href="pages/words-with-z.html">Words with Z</a>
+    <a class="nav-link" href="pages/words-with-x.html">Words with X</a>
+    <a class="nav-link" href="pages/words-ending-in-ing.html">-ING Words</a>
+      <a class="nav-link" href="pages/words-with-j.html">Words with J</a>
+      <a class="nav-link" href="pages/words-ending-in-er.html">-ER Words</a>
+      <a class="nav-link" href="pages/scrabble-word-finder.html">Word Finder</a>
+  </div>
+</nav>
+
+<div style="padding:10px 24px; background:var(--white); border-bottom:1px solid var(--border); position:relative; z-index:1;">
+  <div class="ad-unit ad-728x90">Advertisement · 728×90</div>
+</div>
+
+<div class="page-header">
+  <h1 class="page-title"><em>Wordle</em> Solver</h1>
+  <p class="page-subtitle">Enter your guesses and clue colors — we'll find every possible answer</p>
+</div>
+
+<div class="page-wrap">
+  <div class="main-col">
+
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-title">Your Guesses</div>
+      <div class="card-hint">Type each guess, then click the colored buttons below each letter to set: 🟩 Green (right spot) · 🟨 Yellow (wrong spot) · ⬜ Gray (not in word)</div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot g">A</div> Green = correct position</div>
+        <div class="legend-item"><div class="legend-dot y">A</div> Yellow = in word, wrong spot</div>
+        <div class="legend-item"><div class="legend-dot x">A</div> Gray = not in word</div>
+      </div>
+
+      <!-- Guess grid -->
+      <div class="solver-grid" id="solverGrid"></div>
+
+      <div class="solver-controls">
+        <button class="btn btn-primary" id="solveBtn">Find Answers →</button>
+        <button class="btn btn-secondary" id="addGuessBtn">+ Add Row</button>
+        <button class="btn btn-secondary" id="clearBtn">Clear All</button>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;">
+          <input type="checkbox" id="hardMode"> Hard mode
+        </label>
+      </div>
+
+      <div class="kb-hint" id="kbHint" style="display:none;">
+        <strong>Known letters:</strong> <span id="kbKnown"></span>
+      </div>
+    </div>
+
+    <!-- LOADER -->
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      <div>Filtering word list…</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="resultsSection" style="display:none;">
+      <div class="result-count-bar">
+        <div class="count-num" id="countNum">0</div>
+        <div>
+          <div class="count-text" id="countText">possible words remaining</div>
+          <div class="also-known" id="alsoKnown"></div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <div style="font-family:'Playfair Display',serif; font-size:18px; font-weight:700;">Possible Answers</div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-secondary btn-sm" id="sortFreqBtn">Sort by frequency</button>
+          <button class="btn btn-secondary btn-sm" id="sortAlphaBtn">Sort A–Z</button>
+        </div>
+      </div>
+
+      <div class="word-results" id="wordResults"></div>
+
+      <div class="letter-analysis" id="letterAnalysis"></div>
+    </div>
+
+    <!-- EMPTY -->
+    <div class="empty-state" id="emptyState">
+      <span class="empty-icon">🟩</span>
+      <h2>Add your guesses above</h2>
+      <p>Enter each Wordle guess, color the tiles to match your results, then hit <strong>Find Answers</strong> to see all possibilities.</p>
+    </div>
+
+    <!-- SEO -->
+    <div class="card-sm" style="margin-top:32px;">
+      <h2 style="font-family:'Playfair Display',serif; font-size:18px; margin-bottom:10px;">How to Use the Wordle Solver</h2>
+      <p style="font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:10px;">The Wordle Solver uses your clue history to filter a list of 2,000+ five-letter words down to only those that match all your constraints.</p>
+      <ol style="padding-left:18px; font-size:14px; color:var(--muted); line-height:1.9;">
+        <li>Type your first guess (e.g. <strong>CRANE</strong>) into the first row</li>
+        <li>Click the color buttons below each letter to match Wordle's feedback</li>
+        <li>Add more guess rows as you play</li>
+        <li>Hit <strong>Find Answers</strong> to see every word that fits all clues</li>
+        <li>The top picks are highlighted — choose one with new letters to maximize info</li>
+      </ol>
+      <p style="font-size:13px; color:var(--muted); margin-top:10px; line-height:1.6;"><strong>Best opening words:</strong> CRANE, SLATE, TRACE, STARE, ROAST, LATER, AROSE — these cover the most common English letters (E, T, A, O, I, N, S, R).</p>
+    </div>
+
+    <div style="margin-top:28px; text-align:center;">
+      <div class="ad-unit ad-728x90">Advertisement · 728×90</div>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="ad-unit ad-300x250">Advertisement · 300×250</div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif; font-size:15px; margin-bottom:10px;">Best Opening Guesses</h3>
+      <div id="bestOpeners" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+
+    <div class="card-sm">
+      <h3 style="font-family:'Playfair Display',serif; font-size:15px; margin-bottom:8px;">Wordle Strategy</h3>
+      <ul style="font-size:12px; color:var(--muted); line-height:1.8; padding-left:16px;">
+        <li>Guess words with 5 <strong>different</strong> letters</li>
+        <li>Cover E, T, A, R, O early</li>
+        <li>Avoid repeated letters in early guesses</li>
+        <li>Use yellows to rule out positions</li>
+        <li>Hard mode: must use all known letters</li>
+      </ul>
+    </div>
+
+    <div class="ad-unit ad-300x600">Advertisement · 300×600</div>
+  </aside>
+</div>
+
+<footer class="site-footer">
+  <a href="index.html">Home</a>
+  <a href="wordle.html">Wordle Solver</a>
+  <a href="pages/high-value-words.html">High-Value Words</a>
+  <a href="pages/two-letter-words.html">2-Letter Words</a>
+  <span>© 2026 WordUnscrambler.io</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/dictionary.js"></script>
+<script>
+// ── Wordle word frequency (higher = more common Wordle answer) ──
+const WORD_FREQ = {
+  CRANE:100,SLATE:100,TRACE:99,STARE:99,AROSE:98,LATER:98,ROAST:97,IRATE:96,SNARE:95,LEAST:95,
+  RAISE:94,TEARS:93,SANER:92,STALE:92,TARES:91,RESAT:90,CANER:89,EARNS:88,LARES:87,RALES:86,
+  CRANE:100,AUDIO:95,ADIEU:94,TEARS:93,HEART:92,EARTH:91,SHARE:90,HARES:89,SHEAR:88,HEARS:87,
+  PLANE:86,PANEL:85,PENAL:84,PLENA:83,LEAPT:82,PLATE:81,PLEAT:80,PETAL:79,LEANT:78,PANEL:77,
+  CRATE:95,REACT:94,TRACE:93,CARET:92,CARTE:91,RACER:85,RACER:84,
+  GLARE:80,FLARE:79,STARE:99,SNARE:95,SPARE:82,FLARE:79,GLARE:80,BLARE:75,
+  STONE:88,NOTES:85,TONES:84,ONSET:83,ATONE:82,OAKEN:76,OCEAN:77,CANOE:75,
+  BRACE:78,GRACE:77,TRACE:93,PLACE:82,SPACE:80,
+  WORLD:85,SWORD:80,WORDS:82,CORDS:75,LORDS:74,
+  PILOT:72,LITHO:68,ATILT:65,
+  ALOFT:70,FLOAT:75,AFLOAT:0,
+  MOUND:72,FOUNT:68,COUNT:78,MOUNT:76,
+  SWEAR:82,WEARS:80,WEARY:75,SWEAR:82,
+  KNAVE:65,SHAVE:72,BRAVE:74,GRAVE:73,CRAVE:71,
+};
+
+// ── Common 5-letter words for Wordle ──
+const WORDLE_LIST = `ABOUT ABOVE ABUSE ACTOR ACUTE ADMIT ADOPT ADULT AFTER AGAIN AGENT AGREE AHEAD ALARM ALBUM ALERT ALIKE ALIGN ALIVE ALLAY ALLEY ALLOT ALLOW ALLOY ALOFT ALONE ALONG ALOOF ALTER AMBER AMBLE AMPLE ANGEL ANGLE ANGRY ANNEX ANTIC APPLE APTLY ARISE ARMOR ARSON ARTSY ASHORE ASIDE ASPEN ASSET ATONE ATTIC AUDIO AUDIT AUGUR AVAIL AVERT AVOID AWAKE AWARD AWARE AWFUL AWOKE BADLY BEACH BEARD BEAST BEGAN BEGIN BELOW BENCH BERTH BIBLE BIRCH BIRTH BLAND BLANK BLARE BLAZE BLEAK BLEED BLEND BLESS BLINK BLAST BLOOD BLOOM BLOWN BONUS BOUND BOXER BRAID BRAIN BRAKE BRAND BRAVE BRAWN BREAD BREAK BRIDE BRIEF BRINE BRISK BROAD BROKE BROOK BROOD BROWN BUILD BUILT BULGE BURNT BURST BUYER CABIN CAMEL CANDY CANON CAPER CARGO CAROL CARRY CARVE CATCH CAUSE CEASE CHAIN CHAIR CHALK CHANT CHAOS CHARM CHASE CHASM CHEAT CHECK CHEEK CHEST CHILD CHILL CHOIR CHORD CIVIL CLAIM CLASS CLEAN CLEAR CLERK CLIFF CLIMB CLING CLOCK CLONE CLOSE CLOTH CLOUD CLOWN COACH COBRA COMET COMIC CORAL COUCH COVER CRACK CRANE CRASH CRAWL CRAZE CRAZY CREED CREEK CRIME CROSS CROWD CROWN CRUEL CRUSH CYCLE DAILY DAISY DANCE DEBUT DECAY DEFER DEPTH DERBY DETER DEVIL DIGIT DIRTY DOING DRANK DRAPE DRAWN DREAD DREAM DRESS DRIFT DRINK DRIVE DROVE DROWN DRUNK DUSKY EAGER EAGLE EARLY EARTH EIGHT ELITE EMBER EMPTY ENEMY ENJOY ENTER EQUAL ERASE ESSAY EVADE EXACT EXILE EXTRA FABLE FAINT FAIRY FAITH FANCY FATAL FEAST FLAIR FLAME FLANK FLARE FLASH FLESH FLOCK FLOOR FLORA FOUND FRAME FRANK FRAUD FRESH FROZE FRUIT FULLY FUNKY GAVEL GIVEN GLAND GLARE GLASS GLIDE GLOBE GLOSS GLOVE GNOME GRACE GRADE GRAIN GRAND GRANT GRASP GRASS GRATE GRAVE GREAT GREED GREEN GREET GRIEF GROAN GROUP GROVE GRUFF GUARD GUESS GUEST GUIDE GUISE GUSTO HABIT HARSH HAVEN HEART HEAVY HENCE HERON HOARD HOBBY HONOR HORSE HOUSE HUMAN HUMOR HURRY IDEAL IMAGE IMPLY INNER INPUT INTRO IVORY JUDGE JUICE JUMBO JUMPY KARMA KNIFE KNOCK KNOWN LANCE LANKY LARGE LASER LATCH LATER LEMON LEVEL LIGHT LIMIT LOCAL LODGE LOGIC LOOSE LOVER LOWER LOYAL LUCKY MAGIC MAJOR MANOR MARCH MARSH MATCH MAYOR MEDAL MEDIA MERGE MERIT METAL MIGHT MODEL MONEY MONTH MORAL MOTOR MOUNT MOUSE MOUTH MOVIE MUSIC NAIVE NERVE NIGHT NOBLE NOISE NORTH NOVEL NURSE OFFER OFTEN OLIVE ORDER ORGAN OTHER OUTER OWNER PAINT PANEL PANIC PARTY PASTA PATCH PAUSE PEACE PEDAL PENNY PERCH PERIL PHASE PHONE PHOTO PIANO PIECE PILOT PINCH PITCH PLACE PLAIN PLANE PLANT PLATE PLAZA PLEAD PLUCK PLUME POINT POKER POLAR POPPY POUND POWER PRESS PRICE PRIDE PRIME PRIZE PROBE PROOF PROSE PROUD PROVE PULSE PUPIL PURSE QUEEN QUERY QUEST QUIET QUITE QUOTA QUOTE RADAR RADIO RALLY RANGE RANCH RAPID RATIO REACH READY REALM REBEL REIGN RELAX RISKY RIVAL RIVER RIVET ROCKY ROUGE ROUGH ROUND ROUTE ROYAL SADLY SAINT SALAD SAUCE SAUNA SCALE SCENE SCENT SCOUT SCREW SENSE SERVE SHALL SHAME SHAPE SHARE SHARK SHARP SHELF SHELL SHINE SHIRT SHOCK SHOOT SHORE SHORT SIGHT SKILL SLATE SLAVE SLEEP SLIDE SLOPE SMART SMELL SMILE SMOKE SNAIL SNAKE SOLAR SOLID SOLVE SORRY SOUTH SPACE SPARE SPARK SPAWN SPEAK SPEED SPEND SPICE SPIKE SPINE SPITE SPLIT SPOIL SPOKE SPOON SPRAY SQUAD SQUAT STAFF STAGE STAKE STAND STARE STATE STEAL STEEL STEER STERN STICK STILL STOCK STOOD STORE STORM STORY STOUT STUCK STUDY SUGAR SUPER SURGE SWAMP SWEEP SWEET SWELL SWIFT SWIPE TABLE TASTE TEACH THEME THICK THORN THREE THROW THUMB TIGER TIGHT TITLE TODAY TONIC TOOTH TOPIC TORCH TOTAL TOUCH TOUGH TRACE TRACK TRADE TRAIL TRAIN TRAIT TREAT TRIED TROOP TRUCK TRUMP TRUNK TRUST TRUTH TULIP TUNER TWIST ULTRA UNCLE UNDER UNIFY UNION UNITE UNTIL UPPER UPSET URBAN USHER UTTER VAGUE VALID VALUE VAULT VENOM VIGOR VIRAL VIRUS VOCAL VOUCH VOWEL WAFER WHILE WITCH WOMAN WOMEN WORLD WORST WORTH WOUND WRATH WRITE WROTE YEARN YIELD YOUNG YOUTH ZEBRA STARE CRANE SLATE TRACE RAISE ARISE LEANT IRATE SNARE LEAST SANER TARES RESAT EARNS CANER OAKEN OCEAN CANOE ATONE ALONE TONAL LATHE LATCH LARCH MARCH MARCH SHARE HARES SHEAR HEARS HEART EARTH CRATE REACT CARET CARTE GLARE FLARE BLARE SPARE CARES SCARE GRACE BRACE PLACE SPACE SINCE MINCE RINSE WINCE FINES MINES VINES DINES PINES LINES WINES NINES MINES OVALS NOVEL SOLVE LOVER GLOVE CLOVE COVES COVEN ROVES TROVE GROVE STOVE COVES WOVEN WOVEN PLOVER GROAN ORGAN APRON BARON RADON SALON BATON CANON MASON WAGON LEMON DEMON FELON MELON XENON PRION AVION ONION UNION AEONS NEONS PIANO RHINO AMINO BRINO ODEON AEON PEON NEON EONS LIONS IONS BISON RISEN SIREN LINEN GIVEN RIVEN SEVEN WOVEN RIVEN RISEN VIXEN QUEEN SHEEN GREEN GREET TEETH SWEET STEEL SLEET KNEEL CREEL WHEEL TWEEN PREEN FLEET SHEET TWEET TWEET QUEEN CREEK CREEP STEEP SLEEP SWEEP SEEP WEEP DEEP KEEP KEEP JEEP PEEP HEEL REEL FEEL PEEL KEEL ZEAL REAL MEAL DEAL SEAL TEAL VEAL HEAL WEAL LEAL BEAN DEAN JEAN LEAN MEAN SEAN WEAN PEAN FEAN`.split(/\s+/).filter(w => w.length === 5 && /^[A-Z]+$/.test(w));
+
+const WORDLE_SET = [...new Set(WORDLE_LIST)];
+
+// Best openers with letter coverage scores
+const BEST_OPENERS = [
+  { word: 'CRANE', note: 'Covers C,R,A,N,E — top tier' },
+  { word: 'SLATE', note: 'Covers S,L,A,T,E — widely used' },
+  { word: 'TRACE', note: 'Covers T,R,A,C,E' },
+  { word: 'RAISE', note: 'Covers R,A,I,S,E' },
+  { word: 'AUDIO', note: 'Covers A,U,D,I,O — all vowels' },
+];
+
+document.getElementById('bestOpeners').innerHTML = BEST_OPENERS.map(o => `
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+    <div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;letter-spacing:.08em;">${o.word}</div>
+    <div style="font-size:11px;color:var(--muted);text-align:right;max-width:120px;line-height:1.4;">${o.note}</div>
+  </div>
+`).join('');
+
+// ── State ──
+let rows = [];
+let sortMode = 'freq';
+
+// ── Build a row ──
+function buildRow(rowIndex) {
+  const states = ['gray','gray','gray','gray','gray'];
+  const row = { states, el: null };
+
+  const div = document.createElement('div');
+  div.className = 'guess-row';
+  div.innerHTML = `<div class="guess-label">Guess ${rowIndex+1}</div>`;
+
+  const tilesDiv = document.createElement('div');
+  tilesDiv.className = 'guess-tiles';
+
+  for (let i = 0; i < 5; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'tile-wrap';
+
+    const tile = document.createElement('input');
+    tile.className = 'tile';
+    tile.maxLength = 1;
+    tile.dataset.state = 'gray';
+    tile.dataset.col = i;
+
+    // Auto-advance
+    tile.addEventListener('input', function() {
+      this.value = this.value.replace(/[^a-zA-Z]/g,'').toUpperCase().slice(-1);
+      if (this.value && i < 4) {
+        const next = tilesDiv.querySelectorAll('.tile')[i+1];
+        if (next) next.focus();
+      }
+      updateKbHint();
+    });
+
+    tile.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !this.value && i > 0) {
+        const prev = tilesDiv.querySelectorAll('.tile')[i-1];
+        if (prev) { prev.value=''; prev.focus(); }
+      }
+      if (e.key === 'Enter') document.getElementById('solveBtn').click();
+    });
+
+    // State cycle button
+    const stateBtn = document.createElement('button');
+    stateBtn.className = 'tile-state-btn';
+    stateBtn.dataset.state = 'gray';
+    stateBtn.innerHTML = '⬜ Gray';
+
+    stateBtn.addEventListener('click', function() {
+      const cur = this.dataset.state;
+      const next = cur === 'gray' ? 'yellow' : cur === 'yellow' ? 'green' : 'gray';
+      this.dataset.state = next;
+      tile.dataset.state = next;
+      states[i] = next;
+      if (next === 'gray')   { this.innerHTML = '⬜ Gray';   this.dataset.state='gray'; }
+      if (next === 'yellow') { this.innerHTML = '🟨 Yellow'; this.dataset.state='yellow'; }
+      if (next === 'green')  { this.innerHTML = '🟩 Green';  this.dataset.state='green'; }
+      updateKbHint();
+    });
+
+    wrap.appendChild(tile);
+    wrap.appendChild(stateBtn);
+    tilesDiv.appendChild(wrap);
+  }
+
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'remove-row';
+  removeBtn.innerHTML = '×';
+  removeBtn.title = 'Remove this guess';
+  removeBtn.addEventListener('click', () => {
+    const idx = rows.indexOf(row);
+    if (idx > -1) rows.splice(idx, 1);
+    div.remove();
+    rows.forEach((r,i) => {
+      r.el.querySelector('.guess-label').textContent = `Guess ${i+1}`;
+    });
+  });
+
+  div.appendChild(tilesDiv);
+  div.appendChild(removeBtn);
+  row.el = div;
+  row.tilesDiv = tilesDiv;
+  row.states = states;
+  return row;
+}
+
+function addRow() {
+  const row = buildRow(rows.length);
+  rows.push(row);
+  document.getElementById('solverGrid').appendChild(row.el);
+  // Focus first tile of new row
+  row.tilesDiv.querySelector('.tile').focus();
+}
+
+function clearAll() {
+  rows = [];
+  document.getElementById('solverGrid').innerHTML = '';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'block';
+  document.getElementById('kbHint').style.display = 'none';
+  addRow();
+}
+
+function updateKbHint() {
+  const greens = {}, yellows = {}, grays = new Set();
+  for (const row of rows) {
+    const tiles = row.tilesDiv.querySelectorAll('.tile');
+    tiles.forEach((t, i) => {
+      const letter = t.value.toUpperCase();
+      const state = t.dataset.state;
+      if (!letter) return;
+      if (state === 'green') greens[i] = letter;
+      if (state === 'yellow') { yellows[letter] = yellows[letter] || []; yellows[letter].push(i); }
+      if (state === 'gray') grays.add(letter);
+    });
+  }
+
+  const parts = [];
+  if (Object.keys(greens).length) {
+    const pattern = [1,2,3,4,5].map(i => greens[i-1] || '_').join('');
+    parts.push(`Pattern: <strong>${pattern}</strong>`);
+  }
+  if (Object.keys(yellows).length) {
+    parts.push(`Contains: <strong>${Object.keys(yellows).join(', ')}</strong>`);
+  }
+  if (grays.size) {
+    parts.push(`Excluded: <strong>${[...grays].join(', ')}</strong>`);
+  }
+
+  const hint = document.getElementById('kbHint');
+  if (parts.length) {
+    hint.style.display = 'block';
+    document.getElementById('kbKnown').innerHTML = parts.join(' · ');
+  } else {
+    hint.style.display = 'none';
+  }
+}
+
+function solve() {
+  document.getElementById('loader').classList.add('on');
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'none';
+
+  setTimeout(() => {
+    const greens = {};     // position → letter
+    const yellows = {};    // letter → [forbidden positions]
+    const yellowSet = new Set(); // letters that must be present
+    const grays = new Set();
+
+    let hasInput = false;
+
+    for (const row of rows) {
+      const tiles = row.tilesDiv.querySelectorAll('.tile');
+      tiles.forEach((t, i) => {
+        const letter = t.value.toUpperCase();
+        const state = t.dataset.state;
+        if (!letter) return;
+        hasInput = true;
+        if (state === 'green') {
+          greens[i] = letter;
+        } else if (state === 'yellow') {
+          yellowSet.add(letter);
+          yellows[letter] = yellows[letter] || [];
+          yellows[letter].push(i);
+        } else if (state === 'gray') {
+          grays.add(letter);
+        }
+      });
+    }
+
+    if (!hasInput) {
+      document.getElementById('loader').classList.remove('on');
+      document.getElementById('emptyState').style.display = 'block';
+      showToast('Enter at least one guess first');
+      return;
+    }
+
+    const hardMode = document.getElementById('hardMode').checked;
+
+    const results = WORDLE_SET.filter(word => {
+      // Green constraints
+      for (const [pos, letter] of Object.entries(greens)) {
+        if (word[parseInt(pos)] !== letter) return false;
+      }
+      // Yellow constraints: letter must be present, not in forbidden position
+      for (const [letter, positions] of Object.entries(yellows)) {
+        if (!word.includes(letter)) return false;
+        for (const pos of positions) {
+          if (word[pos] === letter) return false;
+        }
+      }
+      // Gray constraints
+      for (const letter of grays) {
+        // Only exclude if not also green or yellow (duplicate letter handling)
+        if (!greens[Object.keys(greens).find(p => greens[p] === letter)] && !yellowSet.has(letter)) {
+          if (word.includes(letter)) return false;
+        }
+      }
+      return true;
+    });
+
+    // Sort
+    const sorted = [...results].sort((a, b) => {
+      if (sortMode === 'freq') {
+        return (WORD_FREQ[b] || 50) - (WORD_FREQ[a] || 50);
+      }
+      return a.localeCompare(b);
+    });
+
+    renderWordleResults(sorted, greens, yellowSet);
+  }, 120);
+}
+
+function renderWordleResults(words, greens, yellowSet) {
+  document.getElementById('loader').classList.remove('on');
+  document.getElementById('resultsSection').style.display = 'block';
+
+  document.getElementById('countNum').textContent = words.length;
+  const ct = document.getElementById('countText');
+  if (words.length === 0) ct.textContent = 'no words match — check your clues';
+  else if (words.length === 1) ct.textContent = 'word remaining — that\'s it! 🎉';
+  else ct.textContent = `possible words remaining`;
+
+  document.getElementById('alsoKnown').innerHTML = words.length <= 5 && words.length > 0
+    ? `Candidates: <strong>${words.join(', ')}</strong>` : '';
+
+  const container = document.getElementById('wordResults');
+  container.innerHTML = '';
+
+  const top = words.slice(0, 60);
+  top.forEach((word, idx) => {
+    const chip = document.createElement('div');
+    chip.className = `wordle-chip${idx < 3 ? ' top-pick' : ''}`;
+    chip.innerHTML = `
+      <div>${word}</div>
+      ${idx < 3 ? '<div class="chip-rank">★ Top pick</div>' : ''}
+    `;
+    chip.addEventListener('click', () => {
+      // Copy word and show toast
+      navigator.clipboard?.writeText(word);
+      showToast(`Copied "${word}"`);
+    });
+    container.appendChild(chip);
+  });
+
+  if (words.length > 60) {
+    container.innerHTML += `<div style="font-size:13px;color:var(--muted);padding:8px;">… and ${words.length - 60} more. Add more guesses to narrow down.</div>`;
+  }
+
+  // Letter frequency analysis
+  if (words.length > 1 && words.length <= 200) {
+    const freq = {};
+    for (const word of words) {
+      for (const c of new Set([...word])) {
+        freq[c] = (freq[c]||0)+1;
+      }
+    }
+    const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const max = sorted[0][1];
+
+    const la = document.getElementById('letterAnalysis');
+    la.innerHTML = '<div style="font-family:\'Playfair Display\',serif; font-size:16px; font-weight:700; margin-bottom:12px;">Letter frequency in remaining words</div>';
+    sorted.forEach(([letter, count]) => {
+      const pct = Math.round((count/max)*100);
+      la.innerHTML += `
+        <div class="freq-bar-row">
+          <div class="freq-letter">${letter}</div>
+          <div class="freq-bar" style="width:${Math.max(pct,4)}%;"></div>
+          <div class="freq-count">${count}/${words.length}</div>
+        </div>
+      `;
+    });
+  } else {
+    document.getElementById('letterAnalysis').innerHTML = '';
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── Init ──
+document.getElementById('solveBtn').addEventListener('click', solve);
+document.getElementById('addGuessBtn').addEventListener('click', addRow);
+document.getElementById('clearBtn').addEventListener('click', clearAll);
+document.getElementById('sortFreqBtn').addEventListener('click', () => { sortMode='freq'; solve(); });
+document.getElementById('sortAlphaBtn').addEventListener('click', () => { sortMode='alpha'; solve(); });
+
+// Start with 1 row
+addRow();
+</script>
+</body>
+</html>
