@@ -624,48 +624,48 @@ function solve() {
 
     const hardMode = document.getElementById('hardMode').checked;
 
+    // Pre-compute exact letter counts from gray+yellow in same row
+    // e.g. FERRY: R yellow(pos2) + R gray(pos3) = exactly 1 R in answer
+    const exactCounts = {};
+    for (const row of rows) {
+      const tiles = [...row.tilesDiv.querySelectorAll('.tile')];
+      const grayLettersInRow = new Set(
+        tiles.filter(t => t.dataset.state === 'gray' && t.value)
+             .map(t => t.value.toUpperCase())
+      );
+      for (const letter of grayLettersInRow) {
+        const confirmedInRow = tiles.filter(t =>
+          t.value.toUpperCase() === letter &&
+          (t.dataset.state === 'yellow' || t.dataset.state === 'green')
+        ).length;
+        if (confirmedInRow > 0) {
+          exactCounts[letter] = Math.max(exactCounts[letter] || 0, confirmedInRow);
+        }
+      }
+    }
+
     const results = WORDLE_SET.filter(word => {
-      // Green constraints
+      // 1. GREEN: exact position matches
       for (const [pos, letter] of Object.entries(greens)) {
         if (word[parseInt(pos)] !== letter) return false;
       }
-      // Yellow constraints: letter must be present, not in forbidden position
-      // Exception: skip forbidden check if that position is already green-confirmed
-      // (handles cases like PUPPY where same letter appears green AND yellow at same pos)
+      // 2. YELLOW: letter in word, not at forbidden positions
       for (const [letter, positions] of Object.entries(yellows)) {
         if (!word.includes(letter)) return false;
         for (const pos of positions) {
-          if (word[pos] === letter && greens[pos] !== letter) return false;
+          if (word[pos] === letter && greens[parseInt(pos)] !== letter) return false;
         }
       }
-      // Gray constraints — with duplicate letter handling
-      // If a letter appears gray in a guess that ALSO has yellow/green of the same letter,
-      // that single guess tells us the exact count: confirmed = yellow+green in THAT row.
-      // e.g. FERRY: R yellow(idx2) + R gray(idx3) means exactly 1 R in the answer.
+      // 3. GRAY: not in word, unless exact count applies
       for (const letter of grays) {
-        if (yellowSet.has(letter) || Object.values(greens).includes(letter)) {
-          let confirmedCount = 0;
-          for (const row of rows) {
-            const tiles = [...row.tilesDiv.querySelectorAll('.tile')];
-            const hasGray = tiles.some(t =>
-              t.value.toUpperCase() === letter && t.dataset.state === 'gray');
-            if (hasGray) {
-              const rowCount = tiles.filter(t =>
-                t.value.toUpperCase() === letter &&
-                (t.dataset.state === 'yellow' || t.dataset.state === 'green')
-              ).length;
-              confirmedCount = Math.max(confirmedCount, rowCount);
-            }
-          }
-          if (confirmedCount === 0) confirmedCount = 1;
-          const wordCount = [...word].filter(c => c === letter).length;
-          if (wordCount !== confirmedCount) return false;
-        } else {
+        if (exactCounts.hasOwnProperty(letter)) {
+          if (word.split('').filter(c => c === letter).length !== exactCounts[letter]) return false;
+        } else if (!yellowSet.has(letter) && !Object.values(greens).includes(letter)) {
           if (word.includes(letter)) return false;
         }
       }
       return true;
-    });
+    });;
 
     // Sort
     const sorted = [...results].sort((a, b) => {
