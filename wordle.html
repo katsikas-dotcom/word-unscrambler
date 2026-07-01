@@ -639,27 +639,28 @@ function solve() {
         }
       }
       // Gray constraints — with duplicate letter handling
-      // If a letter is gray AND yellow/green, it means the word has exactly
-      // as many of that letter as the yellow/green count (no extras).
-      // e.g. FERRY with first R=yellow, second R=gray means exactly one R.
+      // If a letter appears gray in a guess that ALSO has yellow/green of the same letter,
+      // that single guess tells us the exact count: confirmed = yellow+green in THAT row.
+      // e.g. FERRY: R yellow(idx2) + R gray(idx3) means exactly 1 R in the answer.
       for (const letter of grays) {
         if (yellowSet.has(letter) || Object.values(greens).includes(letter)) {
-          // Duplicate letter case: count confirmed occurrences across all guesses
           let confirmedCount = 0;
           for (const row of rows) {
-            const tiles = row.tilesDiv.querySelectorAll('.tile');
-            tiles.forEach(t => {
-              if (t.value.toUpperCase() === letter &&
-                  (t.dataset.state === 'yellow' || t.dataset.state === 'green')) {
-                confirmedCount++;
-              }
-            });
+            const tiles = [...row.tilesDiv.querySelectorAll('.tile')];
+            const hasGray = tiles.some(t =>
+              t.value.toUpperCase() === letter && t.dataset.state === 'gray');
+            if (hasGray) {
+              const rowCount = tiles.filter(t =>
+                t.value.toUpperCase() === letter &&
+                (t.dataset.state === 'yellow' || t.dataset.state === 'green')
+              ).length;
+              confirmedCount = Math.max(confirmedCount, rowCount);
+            }
           }
-          // Word must have exactly confirmedCount of this letter
+          if (confirmedCount === 0) confirmedCount = 1;
           const wordCount = [...word].filter(c => c === letter).length;
           if (wordCount !== confirmedCount) return false;
         } else {
-          // Simple gray: letter not in word at all
           if (word.includes(letter)) return false;
         }
       }
